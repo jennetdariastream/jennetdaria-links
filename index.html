@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JennetDaria | Gaming & Content Creator</title>
+<meta name="description" content="JennetDaria - Gaming content creator. Find all my socials, latest TikToks, and join the community!">
+<meta property="og:title" content="JennetDaria | Gaming & Content Creator">
+<meta property="og:image" content="./jennet.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --purple-300: #d8b4fe;
+    --purple-400: #c084fc;
+    --purple-500: #a855f7;
+    --purple-600: #9333ea;
+    --pink-300: #f9a8d4;
+    --pink-400: #f472b6;
+    --pink-500: #ec4899;
+    --pink-600: #db2777;
+    --glass-bg: rgba(20, 10, 40, 0.45);
+    --glass-border: rgba(168, 85, 247, 0.2);
+    --glass-border-hover: rgba(200, 130, 252, 0.45);
+    --text-primary: #f5f0ff;
+    --text-muted: rgba(245, 240, 255, 0.5);
+    --glow-purple: rgba(168, 85, 247, 0.35);
+    --glow-pink: rgba(236, 72, 153, 0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: var(--text-primary);
+  }
+
+  /* === LIGHT GRADIENT BG WITH DARK OVERLAY === */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(135deg,
+        #2d1654 0%,
+        #3b1a6e 15%,
+        #4a1d7a 25%,
+        #3e1868 40%,
+        #5c2d91 55%,
+        #4a2078 70%,
+        #3b1a6e 85%,
+        #2d1654 100%
+      );
+  }
+
+  /* Soft color orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(196, 130, 250, 0.3), transparent 70%);
+    top: -10%; left: -10%;
+    animation: orbFloat1 20s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(244, 114, 182, 0.25), transparent 70%);
+    top: 40%; right: -10%;
+    animation: orbFloat2 25s ease-in-out infinite;
+  }
+  .orb-3 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.25), transparent 70%);
+    bottom: -5%; left: 20%;
+    animation: orbFloat3 22s ease-in-out infinite;
+  }
+  .orb-4 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(249, 168, 212, 0.2), transparent 70%);
+    top: 20%; left: 50%;
+    animation: orbFloat4 18s ease-in-out infinite;
+  }
+
+  @keyframes orbFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(60px, 40px) scale(1.1); }
+    66% { transform: translate(-30px, 60px) scale(0.95); }
+  }
+  @keyframes orbFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-50px, -30px) scale(1.05); }
+    66% { transform: translate(30px, -50px) scale(0.9); }
+  }
+  @keyframes orbFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -40px) scale(1.1); }
+  }
+  @keyframes orbFloat4 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-40px, 30px) scale(1.08); }
+    66% { transform: translate(20px, -20px) scale(0.95); }
+  }
+
+  /* Subtle grid from original */
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(168, 85, 247, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(168, 85, 247, 0.04) 1px, transparent 1px);
+    background-size: 55px 55px;
+    mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, black 15%, transparent 65%);
+  }
+
+  /* Scanlines from original */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px, rgba(0, 0, 0, 0.02) 4px
+    );
+  }
+
+  /* === CONSTELLATION CANVAS === */
+  #constellationCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* === MAIN === */
+  .main-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 45px 20px 60px;
+  }
+
+  /* === HERO === */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 24px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Photo */
+  .photo-wrapper { position: relative; width: 180px; height: 180px; }
+
+  .photo-glow {
+    position: absolute;
+    inset: -22px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--glow-purple), var(--glow-pink), transparent 70%);
+    filter: blur(18px);
+    animation: glowPulse 3.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glowPulse {
+    from { opacity: 0.5; transform: scale(0.95); }
+    to { opacity: 0.9; transform: scale(1.07); }
+  }
+
+  .photo-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--pink-400), var(--purple-400), var(--pink-300),
+      var(--purple-500), var(--pink-400)
+    );
+    animation: ringRotate 5s linear infinite;
+  }
+  .photo-ring::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #2d1654;
+  }
+
+  @keyframes ringRotate { to { transform: rotate(360deg); } }
+
+  .photo-img {
+    position: relative;
+    z-index: 2;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(45, 22, 84, 0.8);
+  }
+
+  /* Name */
+  .name-block { text-align: center; }
+
+  .name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #f0d0ff, var(--pink-400), var(--purple-400), #f0d0ff);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3.5s ease-in-out infinite;
+    text-transform: uppercase;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 250% center; }
+  }
+
+  .tagline {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--purple-300);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 5px;
+    opacity: 0.85;
+  }
+
+  /* Live badge */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 7px 18px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .status-badge.is-live {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #86efac;
+    cursor: pointer;
+    animation: livePulse 2s ease-in-out infinite;
+  }
+  .status-badge.is-live:hover {
+    background: rgba(34, 197, 94, 0.25);
+    transform: scale(1.05);
+  }
+  @keyframes livePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  }
+
+  .status-badge.is-offline {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(245, 240, 255, 0.35);
+    cursor: default;
+  }
+
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .is-live .status-dot {
+    background: #22c55e;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+    animation: dotPulse 1.5s ease-in-out infinite;
+  }
+  .is-offline .status-dot { background: rgba(255, 255, 255, 0.2); }
+  @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .live-game { font-size: 0.65rem; font-weight: 500; opacity: 0.7; }
+
+  /* === SCHEDULE BAR === */
+  .schedule-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: rgba(168, 85, 247, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.15);
+    margin-bottom: 24px;
+    max-width: 420px;
+    width: 100%;
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+  }
+
+  .schedule-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--purple-400);
+    flex-shrink: 0;
+  }
+
+  .schedule-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--purple-300);
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .schedule-day { color: var(--pink-300); }
+
+  /* === SOCIALS === */
+  .socials-section {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 44px;
+  }
+
+  .section-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--purple-400);
+    text-align: center;
+    margin-bottom: 2px;
+    opacity: 0.7;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 18px;
+    border-radius: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.55s ease-out both;
+  }
+
+  .social-link:nth-child(2) { animation-delay: 0.04s; }
+  .social-link:nth-child(3) { animation-delay: 0.08s; }
+  .social-link:nth-child(4) { animation-delay: 0.12s; }
+  .social-link:nth-child(5) { animation-delay: 0.16s; }
+  .social-link:nth-child(6) { animation-delay: 0.2s; }
+  .social-link:nth-child(7) { animation-delay: 0.24s; }
+  .social-link:nth-child(8) { animation-delay: 0.28s; }
+
+  .social-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .social-link:hover {
+    transform: translateY(-2px) scale(1.015);
+    border-color: var(--glass-border-hover);
+    box-shadow:
+      0 8px 32px rgba(168, 85, 247, 0.15),
+      0 0 0 1px rgba(200, 130, 252, 0.1);
+  }
+  .social-link:hover::before { opacity: 1; }
+  .social-link:hover .social-icon {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px var(--glow-purple));
+  }
+  .social-link:hover .link-arrow { transform: translateX(4px); opacity: 1; }
+
+  .social-icon {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+    transition: all 0.3s;
+    position: relative; z-index: 1;
+  }
+  .social-icon svg { width: 21px; height: 21px; fill: currentColor; }
+
+  .icon-twitch { background: rgba(145, 70, 255, 0.2); color: #b380ff; }
+  .icon-tiktok { background: rgba(236, 72, 153, 0.15); color: var(--pink-300); }
+  .icon-tiktok-irl { background: rgba(168, 85, 247, 0.15); color: var(--purple-300); }
+  .icon-instagram { background: rgba(236, 72, 153, 0.15); color: #f77fbe; }
+  .icon-youtube { background: rgba(255, 60, 60, 0.12); color: #ff6b6b; }
+  .icon-twitter { background: rgba(140, 170, 220, 0.12); color: #a0c4f0; }
+  .icon-discord { background: rgba(88, 101, 242, 0.18); color: #99a8f7; }
+
+  .social-text { flex: 1; position: relative; z-index: 1; }
+  .social-name { font-weight: 700; font-size: 0.97rem; line-height: 1.2; }
+  .social-handle { font-size: 0.76rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+  .link-arrow { font-size: 1.15rem; opacity: 0.25; transition: all 0.3s; color: var(--purple-400); position: relative; z-index: 1; }
+
+  /* === LATEST TIKTOK === */
+  .tiktok-section {
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 24px;
+    animation: fadeInUp 0.8s ease-out 0.35s both;
+  }
+
+  .tiktok-card {
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .tiktok-card-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tiktok-card-left svg { width: 18px; height: 18px; fill: var(--purple-400); flex-shrink: 0; }
+
+  .tiktok-card-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tiktok-card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--purple-300);
+    line-height: 1.2;
+  }
+
+  .tiktok-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+    margin-top: 2px;
+  }
+
+  #latestTiktokLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--purple-500), var(--pink-500));
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 3px 16px rgba(168, 85, 247, 0.25);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  #latestTiktokLink::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--purple-400), var(--pink-400));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #latestTiktokLink:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(168, 85, 247, 0.35);
+  }
+  #latestTiktokLink:hover::before { opacity: 1; }
+  #latestTiktokLink span, #latestTiktokLink svg { position: relative; z-index: 1; }
+  #latestTiktokLink svg { width: 15px; height: 15px; fill: white; }
+
+  /* Footer */
+  .footer {
+    margin-top: 44px;
+    text-align: center;
+    font-size: 0.68rem;
+    color: rgba(245, 240, 255, 0.15);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .main-content { padding: 30px 16px 40px; }
+    .name { font-size: 1.7rem; }
+    .photo-wrapper, .photo-img { width: 150px; height: 150px; }
+    .social-link { padding: 13px 14px; gap: 12px; }
+    .social-icon { width: 36px; height: 36px; }
+    .social-icon svg { width: 19px; height: 19px; }
+  }
+  @media (min-width: 768px) {
+    .main-content { padding: 65px 20px 80px; }
+    .name { font-size: 2.6rem; }
+    .photo-wrapper, .photo-img { width: 200px; height: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-layer"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+<div class="grid-overlay"></div>
+<div class="scanlines"></div>
+
+<!-- Constellation Canvas -->
+<canvas id="constellationCanvas"></canvas>
+
+<!-- Main -->
+<div class="main-content">
+
+  <div class="hero">
+    <div class="photo-wrapper">
+      <div class="photo-glow"></div>
+      <div class="photo-ring"></div>
+      <img src="./jennet.jpeg" alt="JennetDaria" class="photo-img">
+    </div>
+    <div class="name-block">
+      <h1 class="name">JennetDaria</h1>
+      <p class="tagline">Gaming &amp; Content Creator</p>
+      <a id="liveStatus" class="status-badge is-offline" href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener">
+        <span class="status-dot"></span>
+        <span id="liveText">OFFLINE</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Stream Schedule -->
+  <div class="schedule-bar" id="scheduleBar">
+    <svg class="schedule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span class="schedule-text" id="scheduleText"></span>
+  </div>
+
+  <!-- Latest TikTok (between hero and socials) -->
+  <div class="tiktok-section">
+    <div class="tiktok-card">
+      <div class="tiktok-card-left">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48V13a8.28 8.28 0 005.58 2.15V11.7a4.83 4.83 0 01-3.58-1.59V6.69h3.58z"/></svg>
+        <div class="tiktok-card-text">
+          <span class="tiktok-card-title">Latest TikTok</span>
+          <span class="tiktok-desc" id="tiktokDesc">Check out my newest video!</span>
+        </div>
+      </div>
+      <a id="latestTiktokLink" href="https://www.tiktok.com/@jennetdariagaming" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48V13a8.28 8.28 0 005.58 2.15V11.7a4.83 4.83 0 01-3.58-1.59V6.69h3.58z"/></svg>
+        <span>Watch</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="socials-section">
+    <div class="section-label">Connect With Me</div>
+
+    <a href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener" class="social-link">
+      <div class="social-icon icon-twitch"><svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></div>
+      <div class="social-text"><div class="social-name">Twitch</div><div class="social-handle">twitch.tv/jennetdaria</div></div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://discord.gg/7dQwyfh2KK" target="_blank" rel="noopener" class="social-link">
+      <div class="social-icon icon-discord"><svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg></div>
+      <div class="social-text"><div class="social-name">Discord</div><div class="social-handle">Join the Community</div></div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://www.tiktok.com/@jennetdariagaming" target="_blank" rel="noopener" class="social-link">
+      <div class="social-icon icon-tiktok"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48V13a8.28 8.28 0 005.58 2.15V11.7a4.83 4.83 0 01-3.58-1.59V6.69h3.58z"/></svg></div>
+      <div class="social-text"><div class="social-name">TikTok Gaming</div><div class="social-handle">@jennetdariagaming</div></div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://www.tiktok.com/@jennetdaria" target="_blank" rel="noopener" class="social-link">
+      <div class="social-icon icon-tiktok-irl"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48V13a8.28 8.28 0 005.58 2.15V11.7a4.83 4.83 0 01-3.58-1.59V6.69h3.58z"/></svg></div>
+      <div class="social-text"><div class="social-name">TikTok IRL</div><div class="social-handle">@jennetdaria</div></div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://x.com/jennetdaria" target="_blank" rel="noopener" class="social-link">
+      <div class="social-icon icon-twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+      <div class="social-text"><div class="social-name">X (Twitter)</div><div class="social-handle">@jennetdaria</div></div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://www.instagram.com/jennetdaria" target="_blank" rel="noopener" class="social-link">
+      <div class="social-icon icon-instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+      <div class="social-text"><div class="social-name">Instagram</div><div class="social-handle">@jennetdaria</div></div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://www.youtube.com/channel/UCk2-CccPkPmY8CbPGA6c2aw" target="_blank" rel="noopener" class="social-link">
+      <div class="social-icon icon-youtube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+      <div class="social-text"><div class="social-name">YouTube</div><div class="social-handle">@jennetdaria</div></div>
+      <span class="link-arrow">→</span>
+    </a>
+  </div>
+
+  <div class="footer">✦ JennetDaria ✦</div>
+</div>
+
+<script>
+  // === CONSTELLATION ANIMATION ===
+  const canvas = document.getElementById('constellationCanvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let shootingStars = [];
+  const STAR_COUNT = 75;
+  const CONNECTION_DIST = 140;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Star {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2.2 + 0.5;
+      this.vx = (Math.random() - 0.5) * 0.25;
+      this.vy = (Math.random() - 0.5) * 0.25;
+      this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+      this.twinkleOffset = Math.random() * Math.PI * 2;
+      this.baseAlpha = Math.random() * 0.5 + 0.15;
+    }
+    update(t) {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < -10) this.x = canvas.width + 10;
+      if (this.x > canvas.width + 10) this.x = -10;
+      if (this.y < -10) this.y = canvas.height + 10;
+      if (this.y > canvas.height + 10) this.y = -10;
+      this.alpha = this.baseAlpha + Math.sin(t * this.twinkleSpeed + this.twinkleOffset) * 0.2;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220, 190, 255, ${this.alpha})`;
+      ctx.fill();
+      if (this.size > 1.4) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 160, 255, ${this.alpha * 0.12})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  class ShootingStar {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height * 0.3;
+      this.len = Math.random() * 80 + 40;
+      this.speed = Math.random() * 4 + 3;
+      this.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.3;
+      this.alpha = 1;
+      this.decay = Math.random() * 0.015 + 0.008;
+      this.active = true;
+    }
+    update() {
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed;
+      this.alpha -= this.decay;
+      if (this.alpha <= 0) this.active = false;
+    }
+    draw() {
+      const tailX = this.x - Math.cos(this.angle) * this.len;
+      const tailY = this.y - Math.sin(this.angle) * this.len;
+      const grad = ctx.createLinearGradient(tailX, tailY, this.x, this.y);
+      grad.addColorStop(0, 'rgba(220, 190, 255, 0)');
+      grad.addColorStop(1, `rgba(220, 190, 255, ${this.alpha})`);
+      ctx.beginPath();
+      ctx.moveTo(tailX, tailY);
+      ctx.lineTo(this.x, this.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  for (let i = 0; i < STAR_COUNT; i++) stars.push(new Star());
+
+  function drawConnections() {
+    for (let i = 0; i < stars.length; i++) {
+      for (let j = i + 1; j < stars.length; j++) {
+        const dx = stars[i].x - stars[j].x;
+        const dy = stars[i].y - stars[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECTION_DIST) {
+          const alpha = (1 - dist / CONNECTION_DIST) * 0.1;
+          ctx.beginPath();
+          ctx.moveTo(stars[i].x, stars[i].y);
+          ctx.lineTo(stars[j].x, stars[j].y);
+          ctx.strokeStyle = `rgba(200, 160, 255, ${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  let frame = 0;
+  function animate() {
+    frame++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => { s.update(frame); s.draw(); });
+    drawConnections();
+    if (Math.random() < 0.003) shootingStars.push(new ShootingStar());
+    shootingStars = shootingStars.filter(s => s.active);
+    shootingStars.forEach(s => { s.update(); s.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // === Stream Schedule (auto-converts to visitor's timezone) ===
+  function buildSchedule() {
+    // Jennet streams Mon, Wed, Thu at 6:30 PM Pacific
+    const streamDays = [1, 3, 4]; // Mon=1, Wed=3, Thu=4
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Get a reference Monday in Pacific time and convert to local
+    const now = new Date();
+    const localDayResults = [];
+
+    for (const pDay of streamDays) {
+      // Find the next occurrence of this day
+      const d = new Date();
+      while (d.getDay() !== pDay) d.setDate(d.getDate() + 1);
+
+      // Build a date string for 6:30 PM Pacific on that day
+      const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
+      // Create a Date object at 6:30 PM Pacific using a known UTC offset approach
+      const pacificDate = new Date(dateStr + 'T18:30:00');
+
+      // Get the offset between Pacific and local
+      const pacificNow = new Date(pacificDate.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+      const localNow = new Date(pacificDate.toLocaleString('en-US'));
+      const offsetMs = localNow.getTime() - pacificNow.getTime();
+
+      const localDate = new Date(pacificDate.getTime() + offsetMs);
+      localDayResults.push(dayNames[localDate.getDay()]);
+    }
+
+    // Get the time string from the last conversion
+    const d = new Date();
+    while (d.getDay() !== 1) d.setDate(d.getDate() + 1);
+    const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
+    const pacificDate = new Date(dateStr + 'T18:30:00');
+    const pacificNow = new Date(pacificDate.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+    const localNow = new Date(pacificDate.toLocaleString('en-US'));
+    const offsetMs = localNow.getTime() - pacificNow.getTime();
+    const localDate = new Date(pacificDate.getTime() + offsetMs);
+
+    const timeStr = localDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const tzAbbr = new Intl.DateTimeFormat([], { timeZoneName: 'short' }).formatToParts().find(p => p.type === 'timeZoneName')?.value || '';
+
+    const daysStr = localDayResults.map(d => `<span class="schedule-day">${d}</span>`).join(' · ');
+    document.getElementById('scheduleText').innerHTML = `Catch me live ${daysStr} at ${timeStr} ${tzAbbr} · <a href="https://discord.gg/7dQwyfh2KK" target="_blank" rel="noopener" style="color: var(--pink-400); text-decoration: none;">Join Discord</a> for schedule updates`;
+  }
+  buildSchedule();
+
+  // === Twitch Live Status ===
+  async function checkLiveStatus() {
+    const badge = document.getElementById('liveStatus');
+    const text = document.getElementById('liveText');
+    try {
+      const res = await fetch('/api/twitch-status');
+      const data = await res.json();
+      if (data.isLive) {
+        badge.className = 'status-badge is-live';
+        text.innerHTML = 'STREAMING LIVE' + (data.game ? ' <span class="live-game">· ' + data.game + '</span>' : '');
+      } else {
+        badge.className = 'status-badge is-offline';
+        text.textContent = 'OFFLINE';
+      }
+    } catch (e) {
+      badge.className = 'status-badge is-offline';
+      text.textContent = 'OFFLINE';
+    }
+  }
+  checkLiveStatus();
+  setInterval(checkLiveStatus, 120000);
+
+  // === Latest TikTok ===
+  async function fetchLatestTiktok() {
+    try {
+      const res = await fetch('/api/latest-tiktok');
+      const data = await res.json();
+      if (data.url) document.getElementById('latestTiktokLink').href = data.url;
+      if (data.desc) document.getElementById('tiktokDesc').textContent = data.desc;
+    } catch (e) { console.log('Using fallback TikTok link'); }
+  }
+  fetchLatestTiktok();
+</script>
+
+</body>
+</html>
