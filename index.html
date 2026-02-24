@@ -40,7 +40,6 @@
     color: var(--text-primary);
   }
 
-  /* === LIGHT GRADIENT BG WITH DARK OVERLAY === */
   .bg-layer {
     position: fixed;
     inset: 0;
@@ -58,7 +57,6 @@
       );
   }
 
-  /* Soft color orbs */
   .orb {
     position: fixed;
     border-radius: 50%;
@@ -110,7 +108,6 @@
     66% { transform: translate(20px, -20px) scale(0.95); }
   }
 
-  /* Subtle grid from original */
   .grid-overlay {
     position: fixed;
     inset: 0;
@@ -122,7 +119,6 @@
     mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, black 15%, transparent 65%);
   }
 
-  /* Scanlines from original */
   .scanlines {
     position: fixed;
     inset: 0;
@@ -134,7 +130,6 @@
     );
   }
 
-  /* === CONSTELLATION CANVAS === */
   #constellationCanvas {
     position: fixed;
     inset: 0;
@@ -142,7 +137,6 @@
     pointer-events: none;
   }
 
-  /* === MAIN === */
   .main-content {
     position: relative;
     z-index: 2;
@@ -153,7 +147,6 @@
     padding: 45px 20px 60px;
   }
 
-  /* === HERO === */
   .hero {
     display: flex;
     flex-direction: column;
@@ -168,7 +161,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Photo */
   .photo-wrapper { position: relative; width: 180px; height: 180px; }
 
   .photo-glow {
@@ -215,7 +207,6 @@
     border: 3px solid rgba(45, 22, 84, 0.8);
   }
 
-  /* Name */
   .name-block { text-align: center; }
 
   .name {
@@ -247,7 +238,6 @@
     opacity: 0.85;
   }
 
-  /* Live badge */
   .status-badge {
     display: inline-flex;
     align-items: center;
@@ -296,7 +286,6 @@
   @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
   .live-game { font-size: 0.65rem; font-weight: 500; opacity: 0.7; }
 
-  /* === SCHEDULE BAR === */
   .schedule-bar {
     display: flex;
     align-items: center;
@@ -330,7 +319,6 @@
 
   .schedule-day { color: var(--pink-300); }
 
-  /* === SOCIALS === */
   .socials-section {
     width: 100%;
     max-width: 420px;
@@ -424,7 +412,6 @@
   .social-handle { font-size: 0.76rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
   .link-arrow { font-size: 1.15rem; opacity: 0.25; transition: all 0.3s; color: var(--purple-400); position: relative; z-index: 1; }
 
-  /* === LATEST TIKTOK === */
   .tiktok-section {
     width: 100%;
     max-width: 420px;
@@ -510,7 +497,6 @@
   #latestTiktokLink span, #latestTiktokLink svg { position: relative; z-index: 1; }
   #latestTiktokLink svg { width: 15px; height: 15px; fill: white; }
 
-  /* Footer */
   .footer {
     margin-top: 44px;
     text-align: center;
@@ -520,7 +506,6 @@
     text-transform: uppercase;
   }
 
-  /* Responsive */
   @media (max-width: 480px) {
     .main-content { padding: 30px 16px 40px; }
     .name { font-size: 1.7rem; }
@@ -538,7 +523,6 @@
 </head>
 <body>
 
-<!-- Background -->
 <div class="bg-layer"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
@@ -547,10 +531,8 @@
 <div class="grid-overlay"></div>
 <div class="scanlines"></div>
 
-<!-- Constellation Canvas -->
 <canvas id="constellationCanvas"></canvas>
 
-<!-- Main -->
 <div class="main-content">
 
   <div class="hero">
@@ -569,13 +551,11 @@
     </div>
   </div>
 
-  <!-- Stream Schedule -->
   <div class="schedule-bar" id="scheduleBar">
     <svg class="schedule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     <span class="schedule-text" id="scheduleText"></span>
   </div>
 
-  <!-- Latest TikTok (between hero and socials) -->
   <div class="tiktok-section">
     <div class="tiktok-card">
       <div class="tiktok-card-left">
@@ -642,7 +622,6 @@
 </div>
 
 <script>
-  // === CONSTELLATION ANIMATION ===
   const canvas = document.getElementById('constellationCanvas');
   const ctx = canvas.getContext('2d');
   let stars = [];
@@ -761,11 +740,11 @@
 
   // === Stream Schedule (auto-converts to visitor's timezone) ===
   function buildSchedule() {
-    // Jennet streams Mon, Wed, Thu at 6:30 PM Pacific
+    // Jennet streams Mon, Wed, Thu at 6:30 PM Eastern
     const streamDays = [1, 3, 4]; // Mon=1, Wed=3, Thu=4
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    // Get a reference Monday in Pacific time and convert to local
+    // Get a reference Monday in Eastern time and convert to local
     const now = new Date();
     const localDayResults = [];
 
@@ -774,29 +753,29 @@
       const d = new Date();
       while (d.getDay() !== pDay) d.setDate(d.getDate() + 1);
 
-      // Build a date string for 6:30 PM Pacific on that day
-      const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
-      // Create a Date object at 6:30 PM Pacific using a known UTC offset approach
-      const pacificDate = new Date(dateStr + 'T18:30:00');
+      // Build a date string for 6:30 PM Eastern on that day
+      const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+      // Create a Date object at 6:30 PM Eastern using a known UTC offset approach
+      const easternDate = new Date(dateStr + 'T18:30:00');
 
-      // Get the offset between Pacific and local
-      const pacificNow = new Date(pacificDate.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
-      const localNow = new Date(pacificDate.toLocaleString('en-US'));
-      const offsetMs = localNow.getTime() - pacificNow.getTime();
+      // Get the offset between Eastern and local
+      const easternNow = new Date(easternDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      const localNow = new Date(easternDate.toLocaleString('en-US'));
+      const offsetMs = localNow.getTime() - easternNow.getTime();
 
-      const localDate = new Date(pacificDate.getTime() + offsetMs);
+      const localDate = new Date(easternDate.getTime() + offsetMs);
       localDayResults.push(dayNames[localDate.getDay()]);
     }
 
     // Get the time string from the last conversion
     const d = new Date();
     while (d.getDay() !== 1) d.setDate(d.getDate() + 1);
-    const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
-    const pacificDate = new Date(dateStr + 'T18:30:00');
-    const pacificNow = new Date(pacificDate.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
-    const localNow = new Date(pacificDate.toLocaleString('en-US'));
-    const offsetMs = localNow.getTime() - pacificNow.getTime();
-    const localDate = new Date(pacificDate.getTime() + offsetMs);
+    const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+    const easternDate = new Date(dateStr + 'T18:30:00');
+    const easternNow = new Date(easternDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    const localNow = new Date(easternDate.toLocaleString('en-US'));
+    const offsetMs = localNow.getTime() - easternNow.getTime();
+    const localDate = new Date(easternDate.getTime() + offsetMs);
 
     const timeStr = localDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     const tzAbbr = new Intl.DateTimeFormat([], { timeZoneName: 'short' }).formatToParts().find(p => p.type === 'timeZoneName')?.value || '';
