@@ -319,6 +319,19 @@
 
   .schedule-day { color: var(--pink-300); }
 
+  .schedule-discord {
+    color: var(--pink-400);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(244, 114, 182, 0.4);
+    padding-bottom: 1px;
+    transition: all 0.25s ease;
+  }
+  .schedule-discord:hover {
+    color: var(--pink-300);
+    border-bottom-color: var(--pink-300);
+    text-shadow: 0 0 8px rgba(244, 114, 182, 0.4);
+  }
+
   .socials-section {
     width: 100%;
     max-width: 420px;
@@ -328,16 +341,114 @@
     margin-bottom: 44px;
   }
 
-  .section-label {
+  .section-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .section-tab {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 600;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    user-select: none;
+    position: relative;
+  }
+
+  .section-tab.active {
+    color: white;
+    background: linear-gradient(135deg, var(--pink-500), var(--purple-500));
+    border-color: rgba(236, 72, 153, 0.3);
+    box-shadow: 0 2px 16px rgba(236, 72, 153, 0.25);
+  }
+
+  .section-tab.inactive {
     color: var(--purple-400);
-    text-align: center;
-    margin-bottom: 2px;
-    opacity: 0.7;
+    background: transparent;
+    border-color: rgba(168, 85, 247, 0.15);
+    opacity: 0.6;
+  }
+  .section-tab.inactive:hover {
+    opacity: 0.85;
+    border-color: rgba(168, 85, 247, 0.3);
+  }
+
+  .tab-divider {
+    color: rgba(168, 85, 247, 0.25);
+    font-size: 0.75rem;
+    font-weight: 300;
+    user-select: none;
+  }
+
+  .tab-content-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .tab-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .tab-panel.panel-hidden {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  .tab-panel.panel-visible {
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .about-box {
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .about-text {
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.65;
+    opacity: 0.85;
+  }
+
+  .about-text p { margin-bottom: 12px; }
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .about-highlight {
+    color: var(--pink-300);
+    font-weight: 600;
+  }
+
+  .about-cta {
+    display: inline;
+    color: var(--purple-300);
+    font-style: italic;
   }
 
   .social-link {
@@ -574,7 +685,14 @@
   </div>
 
   <div class="socials-section">
-    <div class="section-label">Connect With Me</div>
+    <div class="section-tabs">
+      <span class="section-tab active" id="tabSocials" onclick="switchTab('socials')">Connect</span>
+      <span class="tab-divider">✦</span>
+      <span class="section-tab inactive" id="tabAbout" onclick="switchTab('about')">About Me</span>
+    </div>
+
+    <div class="tab-content-wrapper">
+      <div class="tab-panel panel-visible" id="panelSocials">
 
     <a href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener" class="social-link">
       <div class="social-icon icon-twitch"><svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></div>
@@ -617,6 +735,20 @@
       <div class="social-text"><div class="social-name">YouTube</div><div class="social-handle">@jennetdaria</div></div>
       <span class="link-arrow">→</span>
     </a>
+      </div>
+
+      <div class="tab-panel panel-hidden" id="panelAbout">
+        <div class="about-box">
+          <div class="about-text">
+            <p><span class="about-highlight">Hihi!!</span> My name is Jennet and I love playing Valorant and cute cozy games!!</p>
+            <p>I graduated college with a biology degree and I'm currently debating on going back to school to continue my education ✨</p>
+            <p>I lovee drawing and spend a lot of my free time painting with acrylics or sketching on my iPad!! I love <span class="about-highlight">astrology, tarot, skincare, makeup, books, flowers, anime</span>, and anything pretty and pink!! I try to keep a chill fun and cozy vibe here!</p>
+            <p>I also have an adorable tuxedo cat named <span class="about-highlight">Jacy</span> who occasionally makes an appearance behind me on stream!</p>
+            <p><span class="about-cta">Wanna know more? Come hang out when I'm live — I love to yap and get to know everyone!! 💖</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="footer">✦ JennetDaria ✦</div>
@@ -782,7 +914,7 @@
     const tzAbbr = new Intl.DateTimeFormat([], { timeZoneName: 'short' }).formatToParts().find(p => p.type === 'timeZoneName')?.value || '';
 
     const daysStr = localDayResults.map(d => `<span class="schedule-day">${d}</span>`).join(' · ');
-    document.getElementById('scheduleText').innerHTML = `Catch me live ${daysStr} at ${timeStr} ${tzAbbr} · <a href="https://discord.gg/7dQwyfh2KK" target="_blank" rel="noopener" style="color: var(--pink-400); text-decoration: none;">Join Discord</a> for schedule updates`;
+    document.getElementById('scheduleText').innerHTML = `Catch me live ${daysStr} at ${timeStr} ${tzAbbr} · <a href="https://discord.gg/7dQwyfh2KK" target="_blank" rel="noopener" class="schedule-discord">Join Discord</a> for schedule updates`;
   }
   buildSchedule();
 
@@ -820,6 +952,25 @@
       descEl.textContent = 'Check out my newest video!';
     }
     descEl.style.display = 'block';
+  }
+  // === Tab Switching ===
+  function switchTab(tab) {
+    const tabSocials = document.getElementById('tabSocials');
+    const tabAbout = document.getElementById('tabAbout');
+    const panelSocials = document.getElementById('panelSocials');
+    const panelAbout = document.getElementById('panelAbout');
+
+    if (tab === 'socials') {
+      tabSocials.className = 'section-tab active';
+      tabAbout.className = 'section-tab inactive';
+      panelSocials.className = 'tab-panel panel-visible';
+      panelAbout.className = 'tab-panel panel-hidden';
+    } else {
+      tabAbout.className = 'section-tab active';
+      tabSocials.className = 'section-tab inactive';
+      panelAbout.className = 'tab-panel panel-visible';
+      panelSocials.className = 'tab-panel panel-hidden';
+    }
   }
   fetchLatestTiktok();
 </script>
