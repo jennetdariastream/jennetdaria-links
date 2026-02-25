@@ -25,6 +25,7 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 
 ### 3. Latest TikTok
 - "Watch" button links directly to her most recent TikTok video
+- Shows the video description once loaded (hidden until API responds to prevent layout shift)
 - Checks for new videos every **3 hours** (cached)
 - Falls back to her profile page if the API is unavailable
 - **Powered by:** RapidAPI TikTok Scraper (free tier, 300 requests/month)
@@ -36,13 +37,22 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 - Same 3-hour cache as above
 - **Powered by:** Same RapidAPI key as above
 
-### 5. Constellation Animation
+### 5. Connect / About Me Tabs
+- Tabbed section that toggles between **social links** and an **About Me** bio
+- Defaults to "Connect" (social links) on page load
+- Active tab shows a pink-to-purple gradient pill; inactive tab stays muted
+- Smooth fade + slide animation when switching tabs
+- About Me bio is displayed in a single glassmorphism card matching the social link style
+- Bio highlights key interests in pink and ends with a CTA to visit her Twitch stream
+- **Powered by:** Client-side JavaScript (no API needed)
+
+### 6. Constellation Animation
 - Canvas-based starfield with 75 twinkling stars
 - Stars drift slowly and connect with purple lines when nearby
 - Occasional shooting stars
 - **Powered by:** Client-side JavaScript (no API needed)
 
-### 6. Design
+### 7. Design
 - Deep purple cosmic background with gradient
 - 4 floating purple/pink blurred orbs
 - Glassmorphism cards (dark glass with backdrop blur)
@@ -162,6 +172,9 @@ All set in: **Vercel → Project → Settings → Environment Variables**
 → Edit `index.html` in GitHub, find the `buildSchedule()` function:
 - `streamDays = [1, 3, 4]` — change day numbers (0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat)
 - `T18:30:00` — change the time (18:30 = 6:30 PM Eastern, use 24h format)
+
+### She changes her About Me bio
+→ Edit `index.html` in GitHub, find the `panelAbout` div and update the text inside the `<p>` tags
 
 ### She changes her TikTok gaming username
 → Edit both `api/latest-tiktok.js` and `api/tiktok-latest.js` in GitHub, change `TIKTOK_USERNAME` at the top
