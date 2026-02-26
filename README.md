@@ -49,15 +49,21 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 ### 6. Constellation Animation
 - Canvas-based starfield with 75 twinkling stars
 - Stars drift slowly and connect with purple lines when nearby
+- **Mouse-reactive:** stars gently push away from cursor, brighten near it, and pink connection lines draw from cursor to nearby stars
 - Occasional shooting stars
 - **Powered by:** Client-side JavaScript (no API needed)
 
 ### 7. Design
-- Deep purple cosmic background with gradient
-- 4 floating purple/pink blurred orbs
-- Glassmorphism cards (dark glass with backdrop blur)
-- Animated gradient ring around profile photo (5s rotation)
-- Shimmer effect on "JENNETDARIA" name
+- Deep purple cosmic background with gradient mesh overlay
+- 5 floating purple/pink blurred orbs with **mouse parallax** (shift with cursor movement and scroll)
+- Vignette overlay for depth and focus
+- Glassmorphism cards (dark glass with backdrop blur) with shimmer sweep on hover
+- **Double animated ring** around profile photo (inner ring + outer counter-rotating ring)
+- **Sparkle particles** orbiting the profile photo in alternating pink/purple
+- Shimmer effect on "JENNETDARIA" name with glowing text shadow
+- Staggered hero entrance animations (photo → name → badge)
+- Scroll-triggered reveal animations on social links with staggered timing
+- Social link hover: icon rotates, arrow turns pink, shimmer sweep across card
 - Orbitron font (headers) + Quicksand (body)
 - Fully responsive (mobile + desktop)
 
