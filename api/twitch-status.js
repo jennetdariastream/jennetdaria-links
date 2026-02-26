@@ -7,13 +7,10 @@
 // 3. In your Vercel project, add these environment variables:
 //    - TWITCH_CLIENT_ID
 //    - TWITCH_CLIENT_SECRET
-
 let cachedToken = null;
 let tokenExpiry = 0;
-
 async function getTwitchToken() {
   if (cachedToken && Date.now() < tokenExpiry) return cachedToken;
-
   const res = await fetch('https://id.twitch.tv/oauth2/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -23,22 +20,18 @@ async function getTwitchToken() {
       grant_type: 'client_credentials',
     }),
   });
-
   const data = await res.json();
   cachedToken = data.access_token;
   tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   return cachedToken;
 }
-
 export default async function handler(req, res) {
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
-
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   try {
     const token = await getTwitchToken();
     const channelName = 'jennetdaria';
-
     const response = await fetch(
       `https://api.twitch.tv/helix/streams?user_login=${channelName}`,
       {
@@ -48,9 +41,7 @@ export default async function handler(req, res) {
         },
       }
     );
-
     const data = await response.json();
-
     if (data.data && data.data.length > 0) {
       const stream = data.data[0];
       return res.status(200).json({
@@ -63,7 +54,6 @@ export default async function handler(req, res) {
           .replace('{height}', '248'),
       });
     }
-
     return res.status(200).json({ isLive: false });
   } catch (error) {
     console.error('Twitch API error:', error);
