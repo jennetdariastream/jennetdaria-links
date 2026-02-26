@@ -11,7 +11,9 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 
 ### 1. Live Status Badge
 - Shows **OFFLINE** (gray) or **STREAMING LIVE · [Game Name]** (green pulsing dot)
+- Badge is hidden until the first API response to prevent a flash of incorrect state on load
 - Checks Twitch API every **2 minutes** automatically
+- Only updates the DOM when the status or game actually changes (prevents animation restarts)
 - Updates game name if she switches games mid-stream
 - Clicking the badge goes to her Twitch channel
 - **Powered by:** Twitch API (free, unlimited)
