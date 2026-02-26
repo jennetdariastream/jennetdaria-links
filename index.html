@@ -866,7 +866,7 @@
     <div class="name-block">
       <h1 class="name">JennetDaria</h1>
       <p class="tagline">Gaming &amp; Content Creator</p>
-      <a id="liveStatus" class="status-badge is-offline" href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener">
+      <a id="liveStatus" class="status-badge is-offline" href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener" style="display:none">
         <span class="status-dot"></span>
         <span id="liveText">OFFLINE</span>
       </a>
@@ -1251,22 +1251,44 @@
   // ============================
   // TWITCH LIVE STATUS
   // ============================
+  let currentLiveState = null; // null = never loaded, true/false after first poll
+  let currentGame = null;
+
   async function checkLiveStatus() {
     const badge = document.getElementById('liveStatus');
     const text = document.getElementById('liveText');
     try {
       const res = await fetch('/api/twitch-status');
       const data = await res.json();
+      const newGame = data.game || null;
+
       if (data.isLive) {
-        badge.className = 'status-badge is-live';
-        text.innerHTML = 'STREAMING LIVE' + (data.game ? ' <span class="live-game">· ' + data.game + '</span>' : '');
+        // Only update DOM if state changed (offline→live) or game changed
+        if (currentLiveState !== true || currentGame !== newGame) {
+          badge.className = 'status-badge is-live';
+          text.innerHTML = 'STREAMING LIVE' + (newGame ? ' <span class="live-game">· ' + newGame + '</span>' : '');
+          currentLiveState = true;
+          currentGame = newGame;
+        }
       } else {
-        badge.className = 'status-badge is-offline';
-        text.textContent = 'OFFLINE';
+        if (currentLiveState !== false) {
+          badge.className = 'status-badge is-offline';
+          text.textContent = 'OFFLINE';
+          currentLiveState = false;
+          currentGame = null;
+        }
       }
     } catch (e) {
-      badge.className = 'status-badge is-offline';
-      text.textContent = 'OFFLINE';
+      if (currentLiveState !== false) {
+        badge.className = 'status-badge is-offline';
+        text.textContent = 'OFFLINE';
+        currentLiveState = false;
+        currentGame = null;
+      }
+    }
+    // Show badge after first API response (hidden on initial load)
+    if (badge.style.display === 'none') {
+      badge.style.display = '';
     }
   }
   checkLiveStatus();
