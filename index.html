@@ -23,6 +23,7 @@
     --pink-500: #ec4899;
     --pink-600: #db2777;
     --glass-bg: rgba(20, 10, 40, 0.45);
+    --glass-bg-hover: rgba(30, 15, 55, 0.55);
     --glass-border: rgba(168, 85, 247, 0.2);
     --glass-border-hover: rgba(200, 130, 252, 0.45);
     --text-primary: #f5f0ff;
@@ -38,30 +39,47 @@
     min-height: 100vh;
     overflow-x: hidden;
     color: var(--text-primary);
+    cursor: default;
   }
 
+  /* === BACKGROUND LAYER === */
   .bg-layer {
     position: fixed;
     inset: 0;
     z-index: 0;
     background:
       linear-gradient(135deg,
-        #2d1654 0%,
-        #3b1a6e 15%,
-        #4a1d7a 25%,
-        #3e1868 40%,
-        #5c2d91 55%,
-        #4a2078 70%,
-        #3b1a6e 85%,
-        #2d1654 100%
+        #1a0d2e 0%,
+        #2d1654 15%,
+        #3b1a6e 25%,
+        #2a1250 40%,
+        #4a2080 55%,
+        #3b1868 70%,
+        #2d1654 85%,
+        #1a0d2e 100%
       );
   }
 
+  /* === GRADIENT MESH OVERLAY === */
+  .mesh-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.4;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 30%, rgba(236, 72, 153, 0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 40% at 50% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 50%);
+  }
+
+  /* === PARALLAX ORBS (move on scroll + mouse) === */
   .orb {
     position: fixed;
     border-radius: 50%;
     filter: blur(80px);
     z-index: 0;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
   }
   .orb-1 {
     width: 500px; height: 500px;
@@ -87,6 +105,12 @@
     top: 20%; left: 50%;
     animation: orbFloat4 18s ease-in-out infinite;
   }
+  .orb-5 {
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.18), transparent 70%);
+    top: 60%; left: 10%;
+    animation: orbFloat5 24s ease-in-out infinite;
+  }
 
   @keyframes orbFloat1 {
     0%, 100% { transform: translate(0, 0) scale(1); }
@@ -107,14 +131,19 @@
     33% { transform: translate(-40px, 30px) scale(1.08); }
     66% { transform: translate(20px, -20px) scale(0.95); }
   }
+  @keyframes orbFloat5 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    40% { transform: translate(30px, -35px) scale(1.06); }
+    70% { transform: translate(-25px, 20px) scale(0.94); }
+  }
 
   .grid-overlay {
     position: fixed;
     inset: 0;
     z-index: 0;
     background-image:
-      linear-gradient(rgba(168, 85, 247, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(168, 85, 247, 0.04) 1px, transparent 1px);
+      linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
     background-size: 55px 55px;
     mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, black 15%, transparent 65%);
   }
@@ -126,8 +155,17 @@
     pointer-events: none;
     background: repeating-linear-gradient(
       0deg, transparent, transparent 2px,
-      rgba(0, 0, 0, 0.02) 2px, rgba(0, 0, 0, 0.02) 4px
+      rgba(0, 0, 0, 0.015) 2px, rgba(0, 0, 0, 0.015) 4px
     );
+  }
+
+  /* === VIGNETTE === */
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 75% 65% at 50% 45%, transparent 40%, rgba(10, 5, 20, 0.5) 100%);
   }
 
   #constellationCanvas {
@@ -137,6 +175,7 @@
     pointer-events: none;
   }
 
+  /* === MAIN CONTENT === */
   .main-content {
     position: relative;
     z-index: 2;
@@ -147,39 +186,61 @@
     padding: 45px 20px 60px;
   }
 
+  /* === HERO === */
   .hero {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 22px;
     margin-bottom: 24px;
-    animation: fadeInUp 0.8s ease-out;
   }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
+  .hero-enter .photo-wrapper { animation: heroPhotoIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .hero-enter .name-block { animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards; opacity: 0; }
+  .hero-enter .status-badge { animation: heroBadgeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards; opacity: 0; }
+
+  @keyframes heroPhotoIn {
+    from { opacity: 0; transform: translateY(40px) scale(0.8); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes heroTextIn {
+    from { opacity: 0; transform: translateY(25px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes heroBadgeIn {
+    from { opacity: 0; transform: translateY(15px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
 
-  .photo-wrapper { position: relative; width: 180px; height: 180px; }
+  .photo-wrapper {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    /* Tilt on mouse hover via JS */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+    perspective: 600px;
+  }
+  .photo-wrapper:hover { transform: scale(1.04); }
 
   .photo-glow {
     position: absolute;
-    inset: -22px;
+    inset: -28px;
     border-radius: 50%;
     background: radial-gradient(circle, var(--glow-purple), var(--glow-pink), transparent 70%);
-    filter: blur(18px);
+    filter: blur(22px);
     animation: glowPulse 3.5s ease-in-out infinite alternate;
   }
 
   @keyframes glowPulse {
-    from { opacity: 0.5; transform: scale(0.95); }
-    to { opacity: 0.9; transform: scale(1.07); }
+    from { opacity: 0.45; transform: scale(0.93); }
+    to { opacity: 0.95; transform: scale(1.08); }
   }
 
+  /* === DOUBLE RING ANIMATION === */
   .photo-ring {
     position: absolute;
-    inset: -4px;
+    inset: -5px;
     border-radius: 50%;
     background: conic-gradient(
       var(--pink-400), var(--purple-400), var(--pink-300),
@@ -195,7 +256,50 @@
     background: #2d1654;
   }
 
+  .photo-ring-outer {
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background: conic-gradient(
+      from 180deg,
+      rgba(236, 72, 153, 0.3), transparent 25%,
+      rgba(168, 85, 247, 0.3), transparent 50%,
+      rgba(236, 72, 153, 0.2), transparent 75%,
+      rgba(168, 85, 247, 0.25), transparent
+    ) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: ringRotateReverse 8s linear infinite;
+  }
+
   @keyframes ringRotate { to { transform: rotate(360deg); } }
+  @keyframes ringRotateReverse { to { transform: rotate(-360deg); } }
+
+  /* === PARTICLE RING (sparkles around photo) === */
+  .particle-ring {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .particle-dot {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--pink-300);
+    animation: particleOrbit var(--dur) linear infinite;
+    opacity: 0;
+  }
+  @keyframes particleOrbit {
+    0% { opacity: 0; }
+    10% { opacity: 0.8; }
+    50% { opacity: 0.4; }
+    90% { opacity: 0.8; }
+    100% { opacity: 0; }
+  }
 
   .photo-img {
     position: relative;
@@ -205,6 +309,10 @@
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid rgba(45, 22, 84, 0.8);
+    transition: filter 0.3s;
+  }
+  .photo-wrapper:hover .photo-img {
+    filter: brightness(1.08);
   }
 
   .name-block { text-align: center; }
@@ -221,6 +329,22 @@
     background-clip: text;
     animation: shimmer 3.5s ease-in-out infinite;
     text-transform: uppercase;
+    position: relative;
+  }
+
+  /* Subtle glow behind the name */
+  .name::after {
+    content: 'JENNETDARIA';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--pink-400), var(--purple-400));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(20px);
+    opacity: 0.35;
+    z-index: -1;
+    animation: shimmer 3.5s ease-in-out infinite;
   }
 
   @keyframes shimmer {
@@ -238,6 +362,7 @@
     opacity: 0.85;
   }
 
+  /* === LIVE STATUS BADGE === */
   .status-badge {
     display: inline-flex;
     align-items: center;
@@ -250,7 +375,7 @@
     letter-spacing: 1.5px;
     text-transform: uppercase;
     text-decoration: none;
-    transition: all 0.3s;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .status-badge.is-live {
@@ -262,7 +387,8 @@
   }
   .status-badge.is-live:hover {
     background: rgba(34, 197, 94, 0.25);
-    transform: scale(1.05);
+    transform: scale(1.06);
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
   }
   @keyframes livePulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.3); }
@@ -286,6 +412,7 @@
   @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
   .live-game { font-size: 0.65rem; font-weight: 500; opacity: 0.7; }
 
+  /* === SCHEDULE BAR === */
   .schedule-bar {
     display: flex;
     align-items: center;
@@ -298,7 +425,18 @@
     margin-bottom: 24px;
     max-width: 420px;
     width: 100%;
-    animation: fadeInUp 0.6s ease-out 0.2s both;
+    opacity: 0;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .schedule-bar:hover {
+    border-color: rgba(168, 85, 247, 0.25);
+    background: rgba(168, 85, 247, 0.12);
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .schedule-icon {
@@ -332,6 +470,7 @@
     text-shadow: 0 0 8px rgba(244, 114, 182, 0.4);
   }
 
+  /* === SOCIALS SECTION === */
   .socials-section {
     width: 100%;
     max-width: 420px;
@@ -380,6 +519,7 @@
   .section-tab.inactive:hover {
     opacity: 0.85;
     border-color: rgba(168, 85, 247, 0.3);
+    transform: translateY(-1px);
   }
 
   .tab-divider {
@@ -392,7 +532,7 @@
   .tab-content-wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .tab-panel {
@@ -400,7 +540,7 @@
     display: flex;
     flex-direction: column;
     gap: 13px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .tab-panel.panel-hidden {
@@ -411,6 +551,7 @@
     opacity: 0;
     pointer-events: none;
     transform: translateY(8px) scale(0.98);
+    visibility: hidden;
   }
 
   .tab-panel.panel-visible {
@@ -418,15 +559,21 @@
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0) scale(1);
+    visibility: visible;
   }
 
+  /* === ABOUT ME === */
   .about-box {
-    padding: 20px;
+    padding: 22px;
     border-radius: 16px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+    transition: border-color 0.3s;
+  }
+  .about-box:hover {
+    border-color: var(--glass-border-hover);
   }
 
   .about-text {
@@ -451,6 +598,7 @@
     font-style: italic;
   }
 
+  /* === SOCIAL LINKS === */
   .social-link {
     display: flex;
     align-items: center;
@@ -463,19 +611,17 @@
     -webkit-backdrop-filter: blur(14px);
     text-decoration: none;
     color: var(--text-primary);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
-    animation: fadeInUp 0.55s ease-out both;
+    opacity: 0;
+    transform: translateY(20px);
   }
 
-  .social-link:nth-child(2) { animation-delay: 0.04s; }
-  .social-link:nth-child(3) { animation-delay: 0.08s; }
-  .social-link:nth-child(4) { animation-delay: 0.12s; }
-  .social-link:nth-child(5) { animation-delay: 0.16s; }
-  .social-link:nth-child(6) { animation-delay: 0.2s; }
-  .social-link:nth-child(7) { animation-delay: 0.24s; }
-  .social-link:nth-child(8) { animation-delay: 0.28s; }
+  .social-link.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .social-link::before {
     content: '';
@@ -483,29 +629,54 @@
     inset: 0;
     background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.05));
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.35s;
+  }
+
+  /* Shimmer sweep on hover */
+  .social-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    transition: left 0.6s ease;
+    z-index: 0;
+  }
+  .social-link:hover::after {
+    left: 100%;
   }
 
   .social-link:hover {
-    transform: translateY(-2px) scale(1.015);
+    transform: translateY(-3px) scale(1.015);
     border-color: var(--glass-border-hover);
+    background: var(--glass-bg-hover);
     box-shadow:
-      0 8px 32px rgba(168, 85, 247, 0.15),
-      0 0 0 1px rgba(200, 130, 252, 0.1);
+      0 10px 40px rgba(168, 85, 247, 0.15),
+      0 0 0 1px rgba(200, 130, 252, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
   .social-link:hover::before { opacity: 1; }
   .social-link:hover .social-icon {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 8px var(--glow-purple));
+    transform: scale(1.12) rotate(-3deg);
+    filter: drop-shadow(0 0 10px var(--glow-purple));
   }
-  .social-link:hover .link-arrow { transform: translateX(4px); opacity: 1; }
+  .social-link:hover .link-arrow {
+    transform: translateX(5px);
+    opacity: 1;
+    color: var(--pink-400);
+  }
+  .social-link:hover .social-name {
+    color: #fff;
+  }
 
   .social-icon {
     width: 40px; height: 40px;
     display: flex; align-items: center; justify-content: center;
     border-radius: 10px;
     flex-shrink: 0;
-    transition: all 0.3s;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative; z-index: 1;
   }
   .social-icon svg { width: 21px; height: 21px; fill: currentColor; }
@@ -519,15 +690,29 @@
   .icon-discord { background: rgba(88, 101, 242, 0.18); color: #99a8f7; }
 
   .social-text { flex: 1; position: relative; z-index: 1; }
-  .social-name { font-weight: 700; font-size: 0.97rem; line-height: 1.2; }
+  .social-name {
+    font-weight: 700;
+    font-size: 0.97rem;
+    line-height: 1.2;
+    transition: color 0.3s;
+  }
   .social-handle { font-size: 0.76rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
-  .link-arrow { font-size: 1.15rem; opacity: 0.25; transition: all 0.3s; color: var(--purple-400); position: relative; z-index: 1; }
+  .link-arrow {
+    font-size: 1.15rem;
+    opacity: 0.25;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    color: var(--purple-400);
+    position: relative;
+    z-index: 1;
+  }
 
+  /* === TIKTOK CARD === */
   .tiktok-section {
     width: 100%;
     max-width: 420px;
     margin-bottom: 24px;
-    animation: fadeInUp 0.8s ease-out 0.35s both;
+    opacity: 0;
+    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
   }
 
   .tiktok-card {
@@ -540,6 +725,11 @@
     display: flex;
     align-items: center;
     gap: 14px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .tiktok-card:hover {
+    border-color: rgba(168, 85, 247, 0.3);
+    background: var(--glass-bg-hover);
   }
 
   .tiktok-card-left {
@@ -586,7 +776,7 @@
     font-weight: 700;
     font-size: 0.82rem;
     letter-spacing: 0.3px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     box-shadow: 0 3px 16px rgba(168, 85, 247, 0.25);
     position: relative;
     overflow: hidden;
@@ -602,13 +792,14 @@
     transition: opacity 0.3s;
   }
   #latestTiktokLink:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 28px rgba(168, 85, 247, 0.35);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(168, 85, 247, 0.35);
   }
   #latestTiktokLink:hover::before { opacity: 1; }
   #latestTiktokLink span, #latestTiktokLink svg { position: relative; z-index: 1; }
   #latestTiktokLink svg { width: 15px; height: 15px; fill: white; }
 
+  /* === FOOTER === */
   .footer {
     margin-top: 44px;
     text-align: center;
@@ -616,8 +807,22 @@
     color: rgba(245, 240, 255, 0.15);
     letter-spacing: 2px;
     text-transform: uppercase;
+    opacity: 0;
+    animation: slideUp 0.5s ease 0.8s forwards;
   }
 
+  /* === SCROLL-TRIGGERED ANIMATIONS === */
+  .reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* === RESPONSIVE === */
   @media (max-width: 480px) {
     .main-content { padding: 30px 16px 40px; }
     .name { font-size: 1.7rem; }
@@ -636,21 +841,26 @@
 <body>
 
 <div class="bg-layer"></div>
+<div class="mesh-overlay"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 <div class="orb orb-4"></div>
+<div class="orb orb-5"></div>
 <div class="grid-overlay"></div>
 <div class="scanlines"></div>
+<div class="vignette"></div>
 
 <canvas id="constellationCanvas"></canvas>
 
 <div class="main-content">
 
-  <div class="hero">
-    <div class="photo-wrapper">
+  <div class="hero hero-enter">
+    <div class="photo-wrapper" id="photoWrapper">
       <div class="photo-glow"></div>
+      <div class="photo-ring-outer"></div>
       <div class="photo-ring"></div>
+      <div class="particle-ring" id="particleRing"></div>
       <img src="./jennet.jpeg" alt="JennetDaria" class="photo-img">
     </div>
     <div class="name-block">
@@ -684,7 +894,7 @@
     </div>
   </div>
 
-  <div class="socials-section">
+  <div class="socials-section reveal" id="socialsSection">
     <div class="section-tabs">
       <span class="section-tab active" id="tabSocials" onclick="switchTab('socials')">Connect</span>
       <span class="tab-divider">✦</span>
@@ -755,12 +965,17 @@
 </div>
 
 <script>
+  // ============================
+  // CONSTELLATION CANVAS (mouse-reactive)
+  // ============================
   const canvas = document.getElementById('constellationCanvas');
   const ctx = canvas.getContext('2d');
   let stars = [];
   let shootingStars = [];
   const STAR_COUNT = 75;
   const CONNECTION_DIST = 140;
+  let mouseX = -1000, mouseY = -1000;
+  const MOUSE_RADIUS = 180;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -769,12 +984,21 @@
   resize();
   window.addEventListener('resize', resize);
 
+  // Track mouse for constellation + orb parallax
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    updateOrbParallax(e);
+  });
+
   class Star {
     constructor() { this.reset(); }
     reset() {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
       this.size = Math.random() * 2.2 + 0.5;
+      this.baseX = this.x;
+      this.baseY = this.y;
       this.vx = (Math.random() - 0.5) * 0.25;
       this.vy = (Math.random() - 0.5) * 0.25;
       this.twinkleSpeed = Math.random() * 0.02 + 0.005;
@@ -782,13 +1006,32 @@
       this.baseAlpha = Math.random() * 0.5 + 0.15;
     }
     update(t) {
-      this.x += this.vx;
-      this.y += this.vy;
-      if (this.x < -10) this.x = canvas.width + 10;
-      if (this.x > canvas.width + 10) this.x = -10;
-      if (this.y < -10) this.y = canvas.height + 10;
-      if (this.y > canvas.height + 10) this.y = -10;
+      this.baseX += this.vx;
+      this.baseY += this.vy;
+      if (this.baseX < -10) this.baseX = canvas.width + 10;
+      if (this.baseX > canvas.width + 10) this.baseX = -10;
+      if (this.baseY < -10) this.baseY = canvas.height + 10;
+      if (this.baseY > canvas.height + 10) this.baseY = -10;
+
+      // Mouse repulsion — stars gently push away from cursor
+      const dx = this.baseX - mouseX;
+      const dy = this.baseY - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < MOUSE_RADIUS && dist > 0) {
+        const force = (1 - dist / MOUSE_RADIUS) * 18;
+        this.x = this.baseX + (dx / dist) * force;
+        this.y = this.baseY + (dy / dist) * force;
+      } else {
+        this.x = this.baseX;
+        this.y = this.baseY;
+      }
+
       this.alpha = this.baseAlpha + Math.sin(t * this.twinkleSpeed + this.twinkleOffset) * 0.2;
+
+      // Brighten stars near cursor
+      if (dist < MOUSE_RADIUS) {
+        this.alpha += (1 - dist / MOUSE_RADIUS) * 0.3;
+      }
     }
     draw() {
       ctx.beginPath();
@@ -846,7 +1089,16 @@
         const dy = stars[i].y - stars[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < CONNECTION_DIST) {
-          const alpha = (1 - dist / CONNECTION_DIST) * 0.1;
+          let alpha = (1 - dist / CONNECTION_DIST) * 0.1;
+
+          // Brighten connections near mouse
+          const midX = (stars[i].x + stars[j].x) / 2;
+          const midY = (stars[i].y + stars[j].y) / 2;
+          const mouseDist = Math.sqrt((midX - mouseX) ** 2 + (midY - mouseY) ** 2);
+          if (mouseDist < MOUSE_RADIUS) {
+            alpha += (1 - mouseDist / MOUSE_RADIUS) * 0.12;
+          }
+
           ctx.beginPath();
           ctx.moveTo(stars[i].x, stars[i].y);
           ctx.lineTo(stars[j].x, stars[j].y);
@@ -858,12 +1110,31 @@
     }
   }
 
+  // Draw lines from mouse to nearby stars
+  function drawMouseConnections() {
+    for (const star of stars) {
+      const dx = star.x - mouseX;
+      const dy = star.y - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < MOUSE_RADIUS * 0.8) {
+        const alpha = (1 - dist / (MOUSE_RADIUS * 0.8)) * 0.15;
+        ctx.beginPath();
+        ctx.moveTo(mouseX, mouseY);
+        ctx.lineTo(star.x, star.y);
+        ctx.strokeStyle = `rgba(236, 72, 153, ${alpha})`;
+        ctx.lineWidth = 0.4;
+        ctx.stroke();
+      }
+    }
+  }
+
   let frame = 0;
   function animate() {
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     stars.forEach(s => { s.update(frame); s.draw(); });
     drawConnections();
+    drawMouseConnections();
     if (Math.random() < 0.003) shootingStars.push(new ShootingStar());
     shootingStars = shootingStars.filter(s => s.active);
     shootingStars.forEach(s => { s.update(); s.draw(); });
@@ -871,36 +1142,95 @@
   }
   animate();
 
-  // === Stream Schedule (auto-converts to visitor's timezone) ===
-  function buildSchedule() {
-    // Jennet streams Mon, Wed, Thu at 6:30 PM Eastern
-    const streamDays = [1, 3, 4]; // Mon=1, Wed=3, Thu=4
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // ============================
+  // ORB PARALLAX (mouse + scroll)
+  // ============================
+  const orbs = document.querySelectorAll('.orb');
+  const orbSpeeds = [0.03, -0.025, 0.02, -0.035, 0.015];
 
-    // Get a reference Monday in Eastern time and convert to local
+  function updateOrbParallax(e) {
+    const cx = (e.clientX / window.innerWidth - 0.5) * 2;
+    const cy = (e.clientY / window.innerHeight - 0.5) * 2;
+    orbs.forEach((orb, i) => {
+      const speed = orbSpeeds[i] || 0.02;
+      const moveX = cx * speed * 100;
+      const moveY = cy * speed * 100;
+      orb.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+  }
+
+  // Scroll parallax on orbs
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    orbs.forEach((orb, i) => {
+      const speed = orbSpeeds[i] || 0.02;
+      orb.style.transform = `translateY(${scrollY * speed * 3}px)`;
+    });
+  });
+
+  // ============================
+  // PARTICLE RING (sparkles around photo)
+  // ============================
+  const particleRing = document.getElementById('particleRing');
+  const PARTICLE_COUNT = 8;
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'particle-dot';
+    const angle = (i / PARTICLE_COUNT) * 360;
+    const radius = 50; // % from center
+    dot.style.left = `${50 + Math.cos(angle * Math.PI / 180) * radius}%`;
+    dot.style.top = `${50 + Math.sin(angle * Math.PI / 180) * radius}%`;
+    dot.style.setProperty('--dur', `${3 + Math.random() * 2}s`);
+    dot.style.animationDelay = `${(i / PARTICLE_COUNT) * 3}s`;
+    dot.style.background = i % 2 === 0 ? 'var(--pink-300)' : 'var(--purple-300)';
+    dot.style.width = `${2 + Math.random() * 2}px`;
+    dot.style.height = dot.style.width;
+    particleRing.appendChild(dot);
+  }
+
+  // ============================
+  // SCROLL-TRIGGERED ANIMATIONS
+  // ============================
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+
+        // Stagger social links within
+        const links = entry.target.querySelectorAll('.social-link');
+        links.forEach((link, i) => {
+          setTimeout(() => {
+            link.classList.add('visible');
+            link.style.transition = `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.06}s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.06}s`;
+          }, 50);
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ============================
+  // STREAM SCHEDULE
+  // ============================
+  function buildSchedule() {
+    const streamDays = [1, 3, 4];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const now = new Date();
     const localDayResults = [];
 
     for (const pDay of streamDays) {
-      // Find the next occurrence of this day
       const d = new Date();
       while (d.getDay() !== pDay) d.setDate(d.getDate() + 1);
-
-      // Build a date string for 6:30 PM Eastern on that day
       const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
-      // Create a Date object at 6:30 PM Eastern using a known UTC offset approach
       const easternDate = new Date(dateStr + 'T18:30:00');
-
-      // Get the offset between Eastern and local
       const easternNow = new Date(easternDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
       const localNow = new Date(easternDate.toLocaleString('en-US'));
       const offsetMs = localNow.getTime() - easternNow.getTime();
-
       const localDate = new Date(easternDate.getTime() + offsetMs);
       localDayResults.push(dayNames[localDate.getDay()]);
     }
 
-    // Get the time string from the last conversion
     const d = new Date();
     while (d.getDay() !== 1) d.setDate(d.getDate() + 1);
     const dateStr = d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
@@ -918,7 +1248,9 @@
   }
   buildSchedule();
 
-  // === Twitch Live Status ===
+  // ============================
+  // TWITCH LIVE STATUS
+  // ============================
   async function checkLiveStatus() {
     const badge = document.getElementById('liveStatus');
     const text = document.getElementById('liveText');
@@ -940,7 +1272,9 @@
   checkLiveStatus();
   setInterval(checkLiveStatus, 120000);
 
-  // === Latest TikTok ===
+  // ============================
+  // LATEST TIKTOK
+  // ============================
   async function fetchLatestTiktok() {
     const descEl = document.getElementById('tiktokDesc');
     try {
@@ -953,7 +1287,11 @@
     }
     descEl.style.display = 'block';
   }
-  // === Tab Switching ===
+  fetchLatestTiktok();
+
+  // ============================
+  // TAB SWITCHING
+  // ============================
   function switchTab(tab) {
     const tabSocials = document.getElementById('tabSocials');
     const tabAbout = document.getElementById('tabAbout');
@@ -972,7 +1310,6 @@
       panelSocials.className = 'tab-panel panel-hidden';
     }
   }
-  fetchLatestTiktok();
 </script>
 
 </body>
