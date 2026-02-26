@@ -1,12 +1,4 @@
 // /api/twitch-status.js
-// Vercel Serverless Function — checks if jennetdaria is live on Twitch
-//
-// SETUP:
-// 1. Go to https://dev.twitch.tv/console/apps and create an app
-// 2. Get your Client ID and Client Secret
-// 3. In your Vercel project, add these environment variables:
-//    - TWITCH_CLIENT_ID
-//    - TWITCH_CLIENT_SECRET
 let cachedToken = null;
 let tokenExpiry = 0;
 async function getTwitchToken() {
@@ -21,12 +13,15 @@ async function getTwitchToken() {
     }),
   });
   const data = await res.json();
+  if (!data.access_token) {
+    console.error('Token fetch failed:', JSON.stringify(data));
+    throw new Error('Failed to get Twitch token');
+  }
   cachedToken = data.access_token;
   tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   return cachedToken;
 }
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   try {
@@ -42,6 +37,7 @@ export default async function handler(req, res) {
       }
     );
     const data = await response.json();
+    console.log('Twitch API response:', JSON.stringify(data));
     if (data.data && data.data.length > 0) {
       const stream = data.data[0];
       return res.status(200).json({
@@ -57,6 +53,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ isLive: false });
   } catch (error) {
     console.error('Twitch API error:', error);
-    return res.status(200).json({ isLive: false, error: 'Failed to check status' });
+    return res.status(200).json({ isLive: false, error: error.message });
   }
 }
