@@ -13,15 +13,16 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 - **Offline state:** Clean hero layout — just the profile photo with animated pink/purple rings and the name below. No status text shown.
 - **Live state:** The entire hero transforms:
   - **"LIVE ON TWITCH · [Game Name]"** text grows in above the photo with a smooth scale/fade animation, pushing content down to make room
-  - Text features a **green gradient shimmer** that sweeps across (4.5s cycle), with the game name shimmering on a 0.4s delay
-  - Green **heartbeat-pulsing dot** (double-pump rhythm) next to the text
+  - Text features a **bright white-green gradient shimmer** with `drop-shadow` glow (4.5s cycle), game name shimmers on a 0.4s delay
+  - Green **heartbeat-pulsing dot** (8px, `#4ade80`, double-pump rhythm scaling to 1.5x) next to the text
   - Separator dot between "LIVE ON TWITCH" and the game name
-  - **Inner ring** turns green with layered glowing box shadows, rotates faster (3.5s vs 5s)
+  - **Inner ring** turns green with 3-layer glowing box shadows (28px + 60px + 100px spread), rotates faster (3.5s vs 5s)
   - **Outer ring** switches to denser green segments, counter-rotates faster (5s vs 8s)
-  - **Three expanding pulse rings** radiate outward from the photo (staggered 1s apart, fade by 70%)
+  - **Three expanding pulse rings** radiate outward from the photo (staggered 1s apart, start at 0.45 opacity, scale to 1.22x, fade by 60%)
   - **Photo glow** expands and turns green with stronger pulse
   - **Particle dots** turn green
   - **Photo border** gets a subtle green tint
+  - **Constellation starfield** gradually shifts from purple/pink to green (stars, connection lines, mouse lines, shooting stars all transition over ~2 seconds)
   - Hero gap expands (24px → 26px) and photo wrapper adds vertical margin for breathing room
 - All transitions use **0.8s cubic-bezier(0.16, 1, 0.3, 1)** for a unified "expanding alive" motion
 - Clicking the status text links to her Twitch channel
@@ -66,6 +67,7 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 - Stars drift slowly and connect with purple lines when nearby
 - **Mouse-reactive:** stars gently push away from cursor, brighten near it, and pink connection lines draw from cursor to nearby stars
 - Occasional shooting stars
+- **Live-reactive:** When she goes live, stars fade from purple to green, connection lines shift from purple to green, mouse lines go from pink to green, and shooting stars streak green — all via a smooth `liveBlend` lerp (~2 second transition). Fades back to purple when offline.
 - **Powered by:** Client-side JavaScript (no API needed)
 
 ### 7. Design
@@ -73,11 +75,11 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 - 5 floating purple/pink blurred orbs with **mouse parallax** (shift with cursor movement and scroll)
 - Vignette overlay for depth and focus
 - Glassmorphism cards (dark glass with backdrop blur) with shimmer sweep on hover
-- **Double animated ring** around profile photo (inner ring + outer counter-rotating ring) — transforms to green when live
+- **Double animated ring** around profile photo (inner ring + outer counter-rotating ring) — transforms to green with 3-layer glow when live
 - **Three expanding pulse rings** around the photo when live (staggered, fading)
 - **Sparkle particles** orbiting the profile photo in alternating pink/purple (turn green when live)
 - Shimmer effect on "JENNETDARIA" name with glowing text shadow (4.5s cycle)
-- Green gradient shimmer on live status text (matching 4.5s cycle)
+- White-green gradient shimmer on live status text with drop-shadow glow (matching 4.5s cycle)
 - Staggered hero entrance animations (photo → name)
 - Scroll-triggered reveal animations on social links with staggered timing
 - Social link hover: icon rotates, arrow turns pink, shimmer sweep across card
@@ -223,7 +225,7 @@ All set in: **Vercel → Project → Settings → Environment Variables**
   .photo-wrapper#photoWrapper     ← toggles .is-live class
     .photo-glow                   ← expands + turns green when live
     .photo-ring-outer             ← denser green segments when live
-    .photo-ring                   ← green conic gradient when live
+    .photo-ring                   ← green conic gradient + 3-layer glow when live
     .live-pulse-ring (×3)         ← expanding rings, staggered 1s apart
     .particle-ring                ← sparkle dots turn green
     img.photo-img                 ← subtle green border tint
@@ -232,11 +234,19 @@ All set in: **Vercel → Project → Settings → Environment Variables**
     p.tagline                     ← "GAMING & CONTENT CREATOR"
 ```
 
+### Constellation Color System (JS)
+- `liveBlend` (0–1) lerps between offline purple/pink and live green
+- `liveBlendTarget` set to 1 (live) or 0 (offline) by `checkLiveStatus()`
+- Lerp rate: `0.02` per animation frame (~2 second full transition at 60fps)
+- 4 color helper functions: `lerpC`, `starColor`, `glowColor`, `mouseColor`
+- Applied to: star fill, star glow, shooting star gradient, connection lines, mouse lines
+
 ### State Management (JS)
 - `currentLiveState` and `currentGame` track previous state
 - DOM only updates when state or game changes
 - `hero.classList.add/remove('is-live-hero')` controls status text visibility + hero spacing
 - `wrapper.classList.add/remove('is-live')` controls ring/glow/particle transformations
+- `liveBlendTarget` controls constellation color transition
 - Game name element updated via `textContent`, separator shown/hidden via `style.display`
 
 ### Animation Sync
@@ -247,8 +257,9 @@ All set in: **Vercel → Project → Settings → Environment Variables**
 | Inner ring rotation | 5s | 3.5s |
 | Outer ring rotation | 8s | 5s |
 | Photo glow pulse | 3.5s | 2s |
-| Dot heartbeat | — | 2s (double-pump) |
-| Expanding pulse rings | — | 3s (staggered 1s) |
+| Dot heartbeat | — | 2s (double-pump, 1.5x scale) |
+| Expanding pulse rings | — | 3s (staggered 1s, 0.45 → 0 opacity) |
+| Constellation color shift | — | ~2s lerp (0.02/frame) |
 | All state transitions | — | 0.8s cubic-bezier |
 
 ---
