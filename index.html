@@ -389,7 +389,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: shimmer 3.5s ease-in-out infinite;
+    animation: shimmer 4.5s ease-in-out infinite;
     text-transform: uppercase;
     position: relative;
   }
@@ -406,7 +406,7 @@
     filter: blur(20px);
     opacity: 0.35;
     z-index: -1;
-    animation: shimmer 3.5s ease-in-out infinite;
+    animation: shimmer 4.5s ease-in-out infinite;
   }
 
   @keyframes shimmer {
@@ -503,12 +503,12 @@
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 2.5px;
-    animation: liveTextGlow 2.5s ease-in-out infinite;
-  }
-
-  @keyframes liveTextGlow {
-    0%, 100% { text-shadow: 0 0 8px rgba(34, 197, 94, 0.3); }
-    50% { text-shadow: 0 0 16px rgba(34, 197, 94, 0.6), 0 0 30px rgba(34, 197, 94, 0.15); }
+    background: linear-gradient(135deg, #86efac, #22c55e, #4ade80, #86efac);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: liveShimmer 4.5s ease-in-out infinite;
   }
 
   .status-live-text .live-sep {
@@ -522,7 +522,17 @@
     font-weight: 600;
     font-size: 0.58rem;
     letter-spacing: 2px;
-    animation: liveTextGlow 2.5s ease-in-out infinite 0.3s;
+    background: linear-gradient(135deg, rgba(134, 239, 172, 0.55), rgba(34, 197, 94, 0.7), rgba(74, 222, 128, 0.6), rgba(134, 239, 172, 0.55));
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: liveShimmer 4.5s ease-in-out infinite 0.4s;
+  }
+
+  @keyframes liveShimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 250% center; }
   }
 
   .hero.is-live-hero .status-offline-text {
