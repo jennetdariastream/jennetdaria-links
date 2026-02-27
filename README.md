@@ -12,7 +12,7 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 ### 1. Live Status Ring System
 - **Offline state:** Clean hero layout — just the profile photo with animated pink/purple rings and the name below. No status text shown.
 - **Live state:** The entire hero transforms:
-  - **"LIVE ON TWITCH · [Game Name]"** text grows in above the photo with a smooth scale/fade animation, pushing content down to make room
+  - **"LIVE ON TWITCH · [Game Name]"** text fades in above the photo with a smooth opacity transition, pushing content down to make room. Container expands over 0.7s, text fades in with a 0.15s delay (landing together at 0.7s). Going offline, text fades out in 0.4s, container collapses 0.1s later. Game name and separator hidden after fade completes (350ms delay) to prevent mid-fade disappearance.
   - Text features a **bright white-green gradient shimmer** with `drop-shadow` glow (4.5s cycle), game name shimmers on a 0.4s delay
   - Green **heartbeat-pulsing dot** (8px, `#4ade80`, double-pump rhythm scaling to 1.5x) next to the text
   - Separator dot between "LIVE ON TWITCH" and the game name
@@ -41,7 +41,9 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 
 ### 3. Latest TikTok
 - "Watch" button links directly to her most recent TikTok video
-- Shows the video description once loaded (hidden until API responds to prevent layout shift)
+- **Entire section stays hidden** until the API responds — URL, description, and display are all set before the card slides in, preventing any text glitch or layout shift on slow connections
+- Respects the page entrance choreography (minimum 0.55s delay so it doesn't appear before the hero finishes animating)
+- Shows the video description below "Latest TikTok" title
 - Checks for new videos every **3 hours** (cached)
 - Falls back to her profile page if the API is unavailable
 - **Powered by:** RapidAPI TikTok Scraper (free tier, 300 requests/month)
@@ -254,6 +256,10 @@ All set in: **Vercel → Project → Settings → Environment Variables**
 |---------|---------|------|
 | Name shimmer | 4.5s | 4.5s |
 | Live text shimmer | — | 4.5s (game 0.4s delay) |
+| Live text fade in | — | 0.55s opacity (0.15s delay) |
+| Live text fade out | 0.4s opacity | — |
+| Status container expand | — | 0.7s |
+| Status container collapse | 0.7s (0.1s delay) | — |
 | Inner ring rotation | 5s | 3.5s |
 | Outer ring rotation | 8s | 5s |
 | Photo glow pulse | 3.5s | 2s |
