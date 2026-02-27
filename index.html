@@ -1481,6 +1481,7 @@
   // ============================
   // LATEST TIKTOK
   // ============================
+  const tiktokReadyAt = Date.now();
   async function fetchLatestTiktok() {
     const descEl = document.getElementById('tiktokDesc');
     const section = document.querySelector('.tiktok-section');
@@ -1493,7 +1494,10 @@
       descEl.textContent = 'Check out my newest video!';
     }
     descEl.style.display = 'block';
-    section.classList.add('visible');
+    // Respect page entrance choreography — don't appear before 0.55s
+    const elapsed = Date.now() - tiktokReadyAt;
+    const minDelay = Math.max(0, 550 - elapsed);
+    setTimeout(() => section.classList.add('visible'), minDelay);
   }
   fetchLatestTiktok();
 
