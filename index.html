@@ -202,7 +202,6 @@
 
   .hero-enter .photo-wrapper { animation: heroPhotoIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
   .hero-enter .name-block { animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards; opacity: 0; }
-  .hero-enter .status-text { animation: heroBadgeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
 
   @keyframes heroPhotoIn {
     from { opacity: 0; transform: translateY(40px) scale(0.8); }
@@ -428,36 +427,24 @@
   .status-text {
     font-family: 'Orbitron', sans-serif;
     text-align: center;
-    height: 28px;
+    height: 0;
     position: relative;
-    margin-bottom: 2px;
-    transition: margin-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: visible;
+    margin-bottom: 0;
+    transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), margin-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .hero.is-live-hero .status-text {
+    height: 28px;
     margin-bottom: 6px;
   }
 
-  .status-offline-text,
   .status-live-text {
     position: absolute;
     left: 50%;
     white-space: nowrap;
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .status-offline-text {
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 6px;
-    color: rgba(200, 180, 230, 0.2);
-    transform: translateX(-50%) translateY(4px);
-    opacity: 1;
-  }
-
-  .status-live-text {
     opacity: 0;
-    transform: translateX(-50%) translateY(8px) scale(0.92);
+    transform: translateX(-50%) translateY(10px) scale(0.8);
     pointer-events: none;
     display: flex;
     align-items: center;
@@ -466,17 +453,14 @@
     border-radius: 20px;
     background: none;
     border: none;
-    position: absolute;
-    animation: none;
     text-decoration: none;
-  }
-
-  .status-live-text::before {
-    display: none;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .hero.is-live-hero .status-live-text {
-    animation: none;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+    pointer-events: auto;
   }
 
   .status-live-text .live-dot {
@@ -533,16 +517,6 @@
   @keyframes liveShimmer {
     0%, 100% { background-position: 0% center; }
     50% { background-position: 250% center; }
-  }
-
-  .hero.is-live-hero .status-offline-text {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-8px) scale(0.9);
-  }
-  .hero.is-live-hero .status-live-text {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-    pointer-events: auto;
   }
 
   /* === EXPANDING PULSE RINGS (live only) === */
@@ -1011,10 +985,9 @@
 
   <div class="hero hero-enter" id="heroSection">
     <div class="status-text">
-      <span class="status-offline-text">OFFLINE</span>
       <a class="status-live-text" id="liveStatusLink" href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener">
         <span class="live-dot"></span>
-        <span class="live-label">STREAMING LIVE</span>
+        <span class="live-label">LIVE ON TWITCH</span>
         <span class="live-sep" id="liveSep" style="display:none">·</span>
         <span class="live-game" id="liveGameText" style="display:none"></span>
       </a>
