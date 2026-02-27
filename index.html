@@ -432,20 +432,21 @@
     position: relative;
     overflow: visible;
     margin-bottom: 0;
-    transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), margin-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s, margin-bottom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
   }
 
   .hero.is-live-hero .status-text {
     height: 28px;
     margin-bottom: 6px;
+    transition: height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), margin-bottom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .status-live-text {
     position: absolute;
     left: 50%;
+    transform: translateX(-50%);
     white-space: nowrap;
     opacity: 0;
-    transform: translateX(-50%) translateY(10px) scale(0.8);
     pointer-events: none;
     display: flex;
     align-items: center;
@@ -455,13 +456,13 @@
     background: none;
     border: none;
     text-decoration: none;
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .hero.is-live-hero .status-live-text {
     opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
     pointer-events: auto;
+    transition: opacity 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s;
   }
 
   .status-live-text .live-dot {
@@ -1442,10 +1443,14 @@
           hero.classList.remove('is-live-hero');
           wrapper.classList.remove('is-live');
           liveBlendTarget = 0;
-          gameEl.style.display = 'none';
-          sepEl.style.display = 'none';
           currentLiveState = false;
           currentGame = null;
+          setTimeout(() => {
+            if (!currentLiveState) {
+              gameEl.style.display = 'none';
+              sepEl.style.display = 'none';
+            }
+          }, 350);
         }
       }
     } catch (e) {
@@ -1453,10 +1458,14 @@
         hero.classList.remove('is-live-hero');
         wrapper.classList.remove('is-live');
         liveBlendTarget = 0;
-        gameEl.style.display = 'none';
-        sepEl.style.display = 'none';
         currentLiveState = false;
         currentGame = null;
+        setTimeout(() => {
+          if (!currentLiveState) {
+            gameEl.style.display = 'none';
+            sepEl.style.display = 'none';
+          }
+        }, 350);
       }
     }
   }
