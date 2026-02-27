@@ -844,7 +844,13 @@
     max-width: 420px;
     margin-bottom: 24px;
     opacity: 0;
-    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+    transform: translateY(20px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tiktok-section.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .tiktok-card {
@@ -1477,6 +1483,7 @@
   // ============================
   async function fetchLatestTiktok() {
     const descEl = document.getElementById('tiktokDesc');
+    const section = document.querySelector('.tiktok-section');
     try {
       const res = await fetch('/api/latest-tiktok');
       const data = await res.json();
@@ -1486,6 +1493,7 @@
       descEl.textContent = 'Check out my newest video!';
     }
     descEl.style.display = 'block';
+    section.classList.add('visible');
   }
   fetchLatestTiktok();
 
