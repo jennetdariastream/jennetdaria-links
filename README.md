@@ -9,13 +9,26 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 
 ## Features
 
-### 1. Live Status Badge
-- Shows **OFFLINE** (gray) or **STREAMING LIVE · [Game Name]** (green pulsing dot)
-- Badge is hidden until the first API response to prevent a flash of incorrect state on load
+### 1. Live Status Ring System
+- **Offline state:** Clean hero layout — just the profile photo with animated pink/purple rings and the name below. No status text shown.
+- **Live state:** The entire hero transforms:
+  - **"LIVE ON TWITCH · [Game Name]"** text grows in above the photo with a smooth scale/fade animation, pushing content down to make room
+  - Text features a **green gradient shimmer** that sweeps across (4.5s cycle), with the game name shimmering on a 0.4s delay
+  - Green **heartbeat-pulsing dot** (double-pump rhythm) next to the text
+  - Separator dot between "LIVE ON TWITCH" and the game name
+  - **Inner ring** turns green with layered glowing box shadows, rotates faster (3.5s vs 5s)
+  - **Outer ring** switches to denser green segments, counter-rotates faster (5s vs 8s)
+  - **Three expanding pulse rings** radiate outward from the photo (staggered 1s apart, fade by 70%)
+  - **Photo glow** expands and turns green with stronger pulse
+  - **Particle dots** turn green
+  - **Photo border** gets a subtle green tint
+  - Hero gap expands (24px → 26px) and photo wrapper adds vertical margin for breathing room
+- All transitions use **0.8s cubic-bezier(0.16, 1, 0.3, 1)** for a unified "expanding alive" motion
+- Clicking the status text links to her Twitch channel
 - Checks Twitch API every **2 minutes** automatically
 - Only updates the DOM when the status or game actually changes (prevents animation restarts)
-- Updates game name if she switches games mid-stream
-- Clicking the badge goes to her Twitch channel
+- Badge is hidden until the first API response to prevent a flash of incorrect state on load
+- Game name auto-centers regardless of length via flex layout with `translateX(-50%)`
 - **Powered by:** Twitch API (free, unlimited)
 
 ### 2. Stream Schedule
@@ -60,10 +73,12 @@ A custom landing page for Twitch streamer **@jennetdaria** featuring live status
 - 5 floating purple/pink blurred orbs with **mouse parallax** (shift with cursor movement and scroll)
 - Vignette overlay for depth and focus
 - Glassmorphism cards (dark glass with backdrop blur) with shimmer sweep on hover
-- **Double animated ring** around profile photo (inner ring + outer counter-rotating ring)
-- **Sparkle particles** orbiting the profile photo in alternating pink/purple
-- Shimmer effect on "JENNETDARIA" name with glowing text shadow
-- Staggered hero entrance animations (photo → name → badge)
+- **Double animated ring** around profile photo (inner ring + outer counter-rotating ring) — transforms to green when live
+- **Three expanding pulse rings** around the photo when live (staggered, fading)
+- **Sparkle particles** orbiting the profile photo in alternating pink/purple (turn green when live)
+- Shimmer effect on "JENNETDARIA" name with glowing text shadow (4.5s cycle)
+- Green gradient shimmer on live status text (matching 4.5s cycle)
+- Staggered hero entrance animations (photo → name)
 - Scroll-triggered reveal animations on social links with staggered timing
 - Social link hover: icon rotates, arrow turns pink, shimmer sweep across card
 - Orbitron font (headers) + Quicksand (body)
@@ -195,6 +210,46 @@ All set in: **Vercel → Project → Settings → Environment Variables**
 
 ### Twitch API stops working
 → Check if the Client Secret was regenerated. If so, update TWITCH_CLIENT_SECRET in Vercel env vars and redeploy.
+
+---
+
+## Live Status — Technical Details
+
+### Hero Structure (HTML)
+```
+.hero#heroSection
+  .status-text                    ← height: 0 offline, 28px live (grows in)
+    a.status-live-text            ← flex row: dot + label + separator + game
+  .photo-wrapper#photoWrapper     ← toggles .is-live class
+    .photo-glow                   ← expands + turns green when live
+    .photo-ring-outer             ← denser green segments when live
+    .photo-ring                   ← green conic gradient when live
+    .live-pulse-ring (×3)         ← expanding rings, staggered 1s apart
+    .particle-ring                ← sparkle dots turn green
+    img.photo-img                 ← subtle green border tint
+  .name-block
+    h1.name                       ← "JENNETDARIA" with pink/purple shimmer
+    p.tagline                     ← "GAMING & CONTENT CREATOR"
+```
+
+### State Management (JS)
+- `currentLiveState` and `currentGame` track previous state
+- DOM only updates when state or game changes
+- `hero.classList.add/remove('is-live-hero')` controls status text visibility + hero spacing
+- `wrapper.classList.add/remove('is-live')` controls ring/glow/particle transformations
+- Game name element updated via `textContent`, separator shown/hidden via `style.display`
+
+### Animation Sync
+| Element | Offline | Live |
+|---------|---------|------|
+| Name shimmer | 4.5s | 4.5s |
+| Live text shimmer | — | 4.5s (game 0.4s delay) |
+| Inner ring rotation | 5s | 3.5s |
+| Outer ring rotation | 8s | 5s |
+| Photo glow pulse | 3.5s | 2s |
+| Dot heartbeat | — | 2s (double-pump) |
+| Expanding pulse rings | — | 3s (staggered 1s) |
+| All state transitions | — | 0.8s cubic-bezier |
 
 ---
 
