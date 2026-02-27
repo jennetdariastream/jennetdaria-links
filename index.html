@@ -191,13 +191,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 22px;
+    gap: 28px;
     margin-bottom: 24px;
+    transition: gap 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hero.is-live-hero {
+    gap: 34px;
   }
 
   .hero-enter .photo-wrapper { animation: heroPhotoIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
   .hero-enter .name-block { animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards; opacity: 0; }
-  .hero-enter .status-badge { animation: heroBadgeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
+  .hero-enter .status-text { animation: heroBadgeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
 
   @keyframes heroPhotoIn {
     from { opacity: 0; transform: translateY(40px) scale(0.8); }
@@ -216,10 +221,14 @@
     position: relative;
     width: 180px;
     height: 180px;
+    margin: 0;
     /* Tilt on mouse hover via JS */
-    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), margin 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     transform-style: preserve-3d;
     perspective: 600px;
+  }
+  .photo-wrapper.is-live {
+    margin: 4px 0;
   }
   .photo-wrapper:hover { transform: scale(1.04); }
 
@@ -230,11 +239,23 @@
     background: radial-gradient(circle, var(--glow-purple), var(--glow-pink), transparent 70%);
     filter: blur(22px);
     animation: glowPulse 3.5s ease-in-out infinite alternate;
+    transition: all 1s ease;
+  }
+
+  .is-live .photo-glow {
+    inset: -44px;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.55), rgba(74, 222, 128, 0.25), transparent 70%);
+    filter: blur(32px);
+    animation: glowPulseLive 2s ease-in-out infinite alternate;
   }
 
   @keyframes glowPulse {
     from { opacity: 0.45; transform: scale(0.93); }
     to { opacity: 0.95; transform: scale(1.08); }
+  }
+  @keyframes glowPulseLive {
+    from { opacity: 0.55; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1.22); }
   }
 
   /* === DOUBLE RING ANIMATION === */
@@ -247,6 +268,7 @@
       var(--purple-500), var(--pink-400)
     );
     animation: ringRotate 5s linear infinite;
+    transition: all 0.8s ease;
   }
   .photo-ring::after {
     content: '';
@@ -254,6 +276,19 @@
     inset: 3px;
     border-radius: 50%;
     background: #2d1654;
+  }
+
+  .is-live .photo-ring {
+    inset: -6px;
+    background: conic-gradient(
+      #22c55e, #4ade80, #86efac, #22c55e,
+      #4ade80, #86efac, #22c55e
+    );
+    box-shadow:
+      0 0 22px rgba(34, 197, 94, 0.5),
+      0 0 55px rgba(34, 197, 94, 0.15),
+      inset 0 0 22px rgba(34, 197, 94, 0.1);
+    animation: ringRotate 3.5s linear infinite;
   }
 
   .photo-ring-outer {
@@ -272,6 +307,24 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     animation: ringRotateReverse 8s linear infinite;
+    transition: all 0.8s ease;
+  }
+
+  .is-live .photo-ring-outer {
+    inset: -16px;
+    border-width: 1.5px;
+    background: conic-gradient(
+      from 180deg,
+      rgba(34, 197, 94, 0.55), transparent 18%,
+      rgba(74, 222, 128, 0.45), transparent 36%,
+      rgba(34, 197, 94, 0.5), transparent 54%,
+      rgba(74, 222, 128, 0.4), transparent 72%,
+      rgba(34, 197, 94, 0.35), transparent 90%
+    ) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: ringRotateReverse 5s linear infinite;
   }
 
   @keyframes ringRotate { to { transform: rotate(360deg); } }
@@ -283,6 +336,10 @@
     inset: -20px;
     border-radius: 50%;
     pointer-events: none;
+    transition: inset 0.8s ease;
+  }
+  .is-live .particle-ring {
+    inset: -26px;
   }
   .particle-dot {
     position: absolute;
@@ -292,7 +349,9 @@
     background: var(--pink-300);
     animation: particleOrbit var(--dur) linear infinite;
     opacity: 0;
+    transition: background 0.6s;
   }
+  .is-live .particle-dot { background: #4ade80 !important; }
   @keyframes particleOrbit {
     0% { opacity: 0; }
     10% { opacity: 0.8; }
@@ -309,7 +368,10 @@
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid rgba(45, 22, 84, 0.8);
-    transition: filter 0.3s;
+    transition: filter 0.3s, border-color 0.8s ease;
+  }
+  .is-live .photo-img {
+    border-color: rgba(34, 197, 94, 0.2);
   }
   .photo-wrapper:hover .photo-img {
     filter: brightness(1.08);
@@ -362,55 +424,169 @@
     opacity: 0.85;
   }
 
-  /* === LIVE STATUS BADGE === */
-  .status-badge {
-    display: inline-flex;
+  /* === LIVE STATUS TEXT === */
+  .status-text {
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    height: 28px;
+    position: relative;
+    margin-bottom: 14px;
+    transition: margin-bottom 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hero.is-live-hero .status-text {
+    margin-bottom: 16px;
+  }
+
+  .status-offline-text,
+  .status-live-text {
+    position: absolute;
+    left: 50%;
+    white-space: nowrap;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .status-offline-text {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 6px;
+    color: rgba(200, 180, 230, 0.2);
+    transform: translateX(-50%) translateY(4px);
+    opacity: 1;
+  }
+
+  .status-live-text {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.92);
+    pointer-events: none;
+    display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-    padding: 7px 18px;
+    gap: 0;
+    padding: 5px 16px 5px 12px;
     border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    position: absolute;
+    animation: none;
     text-decoration: none;
-    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  .status-badge.is-live {
-    background: rgba(34, 197, 94, 0.15);
-    border: 1px solid rgba(34, 197, 94, 0.35);
-    color: #86efac;
-    cursor: pointer;
-    animation: livePulse 2s ease-in-out infinite;
-  }
-  .status-badge.is-live:hover {
-    background: rgba(34, 197, 94, 0.25);
-    transform: scale(1.06);
-    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
-  }
-  @keyframes livePulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.3); }
-    50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  .status-live-text::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 24px;
+    background: radial-gradient(ellipse, rgba(34, 197, 94, 0.12), transparent 70%);
+    filter: blur(8px);
+    z-index: -1;
+    animation: pillGlowPulse 2.5s ease-in-out infinite;
   }
 
-  .status-badge.is-offline {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(245, 240, 255, 0.35);
-    cursor: default;
+  @keyframes pillGlowPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); }
   }
 
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .is-live .status-dot {
+  .hero.is-live-hero .status-live-text {
+    animation: pillBorderPulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pillBorderPulse {
+    0%, 100% {
+      border-color: rgba(34, 197, 94, 0.2);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.08), inset 0 0 8px rgba(34, 197, 94, 0.03);
+    }
+    50% {
+      border-color: rgba(34, 197, 94, 0.45);
+      box-shadow: 0 0 24px rgba(34, 197, 94, 0.2), inset 0 0 12px rgba(34, 197, 94, 0.06);
+    }
+  }
+
+  .status-live-text .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
     background: #22c55e;
-    box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
-    animation: dotPulse 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+    margin-right: 8px;
+    position: relative;
+    animation: dotGlowPulse 1.5s ease-in-out infinite;
   }
-  .is-offline .status-dot { background: rgba(255, 255, 255, 0.2); }
-  @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-  .live-game { font-size: 0.65rem; font-weight: 500; opacity: 0.7; }
+
+  .status-live-text .live-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    animation: dotRingExpand 2s ease-out infinite;
+  }
+
+  @keyframes dotGlowPulse {
+    0%, 100% { box-shadow: 0 0 6px rgba(34, 197, 94, 0.6), 0 0 12px rgba(34, 197, 94, 0.2); }
+    50% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.35); }
+  }
+
+  @keyframes dotRingExpand {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+
+  .status-live-text .live-label {
+    color: #86efac;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    animation: liveTextGlow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes liveTextGlow {
+    0%, 100% { text-shadow: 0 0 8px rgba(34, 197, 94, 0.3); }
+    50% { text-shadow: 0 0 16px rgba(34, 197, 94, 0.6), 0 0 30px rgba(34, 197, 94, 0.15); }
+  }
+
+  .status-live-text .live-sep {
+    color: rgba(134, 239, 172, 0.25);
+    font-size: 0.65rem;
+    margin: 0 6px;
+  }
+
+  .status-live-text .live-game {
+    color: rgba(134, 239, 172, 0.55);
+    font-weight: 600;
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    animation: liveTextGlow 2.5s ease-in-out infinite 0.3s;
+  }
+
+  .hero.is-live-hero .status-offline-text {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px) scale(0.9);
+  }
+  .hero.is-live-hero .status-live-text {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* === EXPANDING PULSE RINGS (live only) === */
+  .live-pulse-ring {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(34, 197, 94, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .is-live .live-pulse-ring { animation: ringPulseExpand 3s ease-out infinite; }
+  .is-live .live-pulse-ring:nth-child(5) { animation-delay: 1s; }
+  .is-live .live-pulse-ring:nth-child(6) { animation-delay: 2s; }
+
+  @keyframes ringPulseExpand {
+    0% { opacity: 0.45; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.45); }
+  }
 
   /* === SCHEDULE BAR === */
   .schedule-bar {
@@ -856,21 +1032,30 @@
 
 <div class="main-content">
 
-  <div class="hero hero-enter">
+  <div class="hero hero-enter" id="heroSection">
+    <div class="status-text">
+      <span class="status-offline-text">OFFLINE</span>
+      <a class="status-live-text" id="liveStatusLink" href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener">
+        <span class="live-dot"></span>
+        <span class="live-label">STREAMING LIVE</span>
+        <span class="live-sep" id="liveSep" style="display:none">·</span>
+        <span class="live-game" id="liveGameText" style="display:none"></span>
+      </a>
+    </div>
+
     <div class="photo-wrapper" id="photoWrapper">
       <div class="photo-glow"></div>
       <div class="photo-ring-outer"></div>
       <div class="photo-ring"></div>
+      <div class="live-pulse-ring"></div>
+      <div class="live-pulse-ring"></div>
+      <div class="live-pulse-ring"></div>
       <div class="particle-ring" id="particleRing"></div>
       <img src="./jennet.jpeg" alt="JennetDaria" class="photo-img">
     </div>
     <div class="name-block">
       <h1 class="name">JennetDaria</h1>
       <p class="tagline">Gaming &amp; Content Creator</p>
-      <a id="liveStatus" class="status-badge is-offline" href="https://www.twitch.tv/jennetdaria" target="_blank" rel="noopener" style="display:none">
-        <span class="status-dot"></span>
-        <span id="liveText">OFFLINE</span>
-      </a>
     </div>
   </div>
 
@@ -1252,44 +1437,53 @@
   // ============================
   // TWITCH LIVE STATUS
   // ============================
-  let currentLiveState = null; // null = never loaded, true/false after first poll
+  let currentLiveState = null;
   let currentGame = null;
 
   async function checkLiveStatus() {
-    const badge = document.getElementById('liveStatus');
-    const text = document.getElementById('liveText');
+    const hero = document.getElementById('heroSection');
+    const wrapper = document.getElementById('photoWrapper');
+    const gameEl = document.getElementById('liveGameText');
+    const sepEl = document.getElementById('liveSep');
     try {
       const res = await fetch('/api/twitch-status');
       const data = await res.json();
       const newGame = data.game || null;
 
       if (data.isLive) {
-        // Only update DOM if state changed (offline→live) or game changed
         if (currentLiveState !== true || currentGame !== newGame) {
-          badge.className = 'status-badge is-live';
-          text.innerHTML = 'STREAMING LIVE' + (newGame ? ' <span class="live-game">· ' + newGame + '</span>' : '');
+          hero.classList.add('is-live-hero');
+          wrapper.classList.add('is-live');
+          if (newGame) {
+            gameEl.textContent = newGame;
+            gameEl.style.display = '';
+            sepEl.style.display = '';
+          } else {
+            gameEl.style.display = 'none';
+            sepEl.style.display = 'none';
+          }
           currentLiveState = true;
           currentGame = newGame;
         }
       } else {
         if (currentLiveState !== false) {
-          badge.className = 'status-badge is-offline';
-          text.textContent = 'OFFLINE';
+          hero.classList.remove('is-live-hero');
+          wrapper.classList.remove('is-live');
+          gameEl.style.display = 'none';
+          sepEl.style.display = 'none';
           currentLiveState = false;
           currentGame = null;
         }
       }
     } catch (e) {
       if (currentLiveState !== false) {
-        badge.className = 'status-badge is-offline';
-        text.textContent = 'OFFLINE';
+        hero.classList.remove('is-live-hero');
+        wrapper.classList.remove('is-live');
+        gameEl.style.display = 'none';
+        sepEl.style.display = 'none';
         currentLiveState = false;
         currentGame = null;
       }
-    }
-    // Show badge after first API response (hidden on initial load)
-    if (badge.style.display === 'none') {
-      badge.style.display = '';
     }
   }
   checkLiveStatus();
